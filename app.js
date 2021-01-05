@@ -20,18 +20,16 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.get('/vouchers', async (req,res)=>{
     const collection = client.db("demo").collection("vouchers");
     let data = await collection.find({}).toArray();
     res.json(data)
 });
+
 app.post('/store-voucher' , (req,res,next)=>{
     console.log(req.body);
     const collection = client.db("demo").collection("vouchers");
     collection.insertOne(req.body).then(function(id){
-
         res.json({message:"created voucher:"+id.insertedId});
     }).catch(e=>{
         res.json({error:e.error});
